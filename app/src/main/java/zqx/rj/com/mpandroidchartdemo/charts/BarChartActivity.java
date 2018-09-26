@@ -37,14 +37,36 @@ public class BarChartActivity extends AppCompatActivity {
         mBarChart = findViewById(R.id.bar_chart);
     }
 
-    private void initData() {
+    // 堆叠条形图
+//    private void initData() {
+//
+//        // y 数据
+//        ArrayList<BarEntry> yValues = new ArrayList<>();
+//
+//        for (int x = 0; x < 30; x++) {
+//            float y = (float) (Math.random() * 30) + 10;
+//            float y2 = (float) (Math.random() * 30) + 10;
+//            // 同一个x  不同 y 值。
+//            yValues.add(new BarEntry(x, new float[]{y, y2}));
+//        }
+//
+//        // y 轴数据集
+//        BarDataSet barDataSet = new BarDataSet(yValues, "我是Label");
+//        // 设置 对应数据 颜色
+//        barDataSet.setColors(Color.RED, Color.GREEN);
+//
+//        mBarData = new BarData(barDataSet);
+//    }
+
+
+    private void initData(){
 
         // y 数据
         ArrayList<BarEntry> yValues = new ArrayList<>();
         // y2 数据
         ArrayList<BarEntry> yValues2 = new ArrayList<>();
 
-        for (int x = 0; x < 30; x++) {
+        for (int x = 0; x < 10; x++) {
             float y = (float) (Math.random() * 30) + 10;
             yValues.add(new BarEntry(x, y));
 
@@ -57,18 +79,27 @@ public class BarChartActivity extends AppCompatActivity {
         barDataSet.setColor(Color.YELLOW);
 
         // y2 轴数据集
-        BarDataSet barDataSet2 = new BarDataSet(yValues2, "我是蓝色");
+        BarDataSet barDataSet2 = new BarDataSet(yValues2, "我是绿色");
         barDataSet2.setColor(Color.GREEN);
 
-        List<IBarDataSet> setList = new ArrayList<>();
-        setList.add(barDataSet);
-        setList.add(barDataSet2);
-
-        mBarData = new BarData(setList);
+        mBarData = new BarData(barDataSet, barDataSet2);
     }
+
+
+
+
 
     private void initBarChart() {
         mBarChart.setData(mBarData);
+        float barWidth = 0.45f;
+        // 设置 柱子宽度
+        mBarData.setBarWidth(barWidth);
+
+        // 分组条形图 需要设置
+        float groupSpace = 0.06f;
+        float barSpace = 0.02f;
+        mBarChart.groupBars(0.0f, groupSpace, barSpace);
+
 
         // 设置 条形图 简介
         Description description = new Description();
@@ -101,8 +132,9 @@ public class BarChartActivity extends AppCompatActivity {
         xAxis.setAxisLineWidth(2f);
         // 设置 x轴 的刻度数量
         xAxis.setLabelCount(10);
-        xAxis.setAxisMinimum(0f);
-        xAxis.setAxisMaximum(30f);
+        // 设置 x 轴 从0开始 默认不是从 0
+        xAxis.setAxisMinimum(0);
+
 
         // 获取 右边 y 轴
         YAxis mRAxis = mBarChart.getAxisRight();
